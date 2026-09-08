@@ -1,0 +1,85 @@
+# ==========================================
+# Boreo Project Root .gitignore
+# ==========================================
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor Files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+.history/
+.atom/
+.buildlog/
+
+# Log Files & Temporary Files
+*.log
+*.tmp
+*.bak
+*.pid
+*.seed
+*.pid.lock
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.keystore
+*.jks
+
+# Flutter / Dart Build & Tool Artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+.packages
+/build/
+**/build/
+**/doc/api/
+
+# Android Specific Artifacts
+**/android/local.properties
+**/android/.gradle/
+**/android/captures/
+**/android/**/GeneratedPluginRegistrant.java
+**/android/app/debug/
+**/android/app/release/
+
+# iOS / macOS Specific Artifacts
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/.last_build_id
+**/macOS/Flutter/ephemeral/
+
+# Desktop (Windows / Linux) Specific Artifacts
+**/windows/flutter/ephemeral/
+**/windows/CMakeCache.txt
+**/windows/CMakeFiles/
+**/windows/CMakeSettings.json
+**/windows/CMakeGeneration.json
+**/linux/flutter/ephemeral/
+
+# Symbolication & Obfuscation Maps
+app.*.symbols
+app.*.map.json

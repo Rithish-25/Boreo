@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010621052244",
+    "project_id": "rmbf-admin",
+    "storage_bucket": "rmbf-admin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010621052244:android:9d0f17f696a0da2c0084c1",
+        "android_client_info": {
+          "package_name": "com.rotary.erode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuxN1TdpMrifR6s8vU7xvX_ErncQEA3k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

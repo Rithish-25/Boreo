@@ -1,4 +1,4 @@
-# rmbf
+# boreo_app
 
 A new Flutter project.
 

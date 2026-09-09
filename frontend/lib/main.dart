@@ -37,20 +37,24 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize local notifications for Android
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  try {
+    // Initialize local notifications for Android
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
-  const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
-  const initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(
-    settings: initializationSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse response) async {
-      await _triggerSpecialEventsPopup();
-    },
-  );
+    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        await _triggerSpecialEventsPopup();
+      },
+    );
+  } catch (e) {
+    debugPrint('Local notification initialization error: $e');
+  }
 
   runApp(
     ChangeNotifierProvider(
@@ -257,7 +261,7 @@ class _MainShellState extends State<MainShell> {
   String _getAppBarTitle() {
     switch (_currentIndex) {
       case 0:
-        return t("BOREO Dashboard");
+        return t("Dashboard");
       case 1:
         return t("Member Directory");
       case 2:
@@ -300,7 +304,10 @@ class _MainShellState extends State<MainShell> {
                   gradient: AppTheme.primaryGradient,
                 ),
               ),
-              title: Text(_getAppBarTitle()),
+              title: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(_getAppBarTitle()),
+              ),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(1.0),
                 child: Container(color: Colors.white24, height: 1.0),

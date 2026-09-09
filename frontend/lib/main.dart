@@ -13,8 +13,7 @@ import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/face_to_face_form_screen.dart';
 import 'screens/splash_screen.dart';
-import 'screens/apply_leave_screen.dart';
-import 'screens/early_going_screen.dart';
+
 import 'screens/visitor_form_screen.dart';
 import 'screens/attendance_bylaw_screen.dart';
 import 'language_service.dart';
@@ -258,7 +257,7 @@ class _MainShellState extends State<MainShell> {
   String _getAppBarTitle() {
     switch (_currentIndex) {
       case 0:
-        return t("Boreo Dashboard");
+        return t("BOREO Dashboard");
       case 1:
         return t("Member Directory");
       case 2:
@@ -415,7 +414,7 @@ class _MainShellState extends State<MainShell> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(16),
@@ -428,8 +427,8 @@ class _MainShellState extends State<MainShell> {
                               ],
                             ),
                             child: Image.asset(
-                              'assets/app-logo.png',
-                              height: 38,
+                              'assets/slidebar.png',
+                              height: 68,
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -478,28 +477,6 @@ class _MainShellState extends State<MainShell> {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         children: [
                           if (!_isVisitor) ...[
-                            _buildDrawerItem(
-                              icon: Icons.calendar_today_outlined,
-                              title: "Apply Leave",
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const ApplyLeaveScreen()),
-                                );
-                              },
-                            ),
-                            _buildDrawerItem(
-                              icon: Icons.directions_run_outlined,
-                              title: "Early Going",
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const EarlyGoingScreen()),
-                                );
-                              },
-                            ),
                             _buildDrawerItem(
                               icon: Icons.handshake_outlined,
                               title: "Face to Face Form",
@@ -619,7 +596,7 @@ class _MainShellState extends State<MainShell> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
-        leading: Icon(icon, color: Colors.white, size: 20),
+        leading: Icon(icon, color: AppTheme.secondary, size: 20),
         title: Text(
           t(title),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
@@ -646,11 +623,11 @@ class _MainShellState extends State<MainShell> {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            gradient: isSelected ? AppTheme.primaryGradient : null,
+            gradient: isSelected ? AppTheme.orangeGradient : null,
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: AppTheme.primary.withOpacity(0.35),
+                      color: AppTheme.secondary.withOpacity(0.35),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     )

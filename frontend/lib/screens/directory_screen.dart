@@ -4,7 +4,6 @@ import '../language_service.dart';
 import '../models/member.dart';
 import '../services/member_service.dart';
 import '../widgets/skeleton.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import '../providers/member_session_provider.dart';
 import 'member_details_screen.dart';
@@ -302,45 +301,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> with SingleTickerProv
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              // Action Buttons
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildContactBtn(
-                    icon: Icons.phone,
-                    color: Colors.blue.shade50,
-                    iconColor: Colors.blue.shade700,
-                    onTap: () async {
-                      if (member.phone.isNotEmpty) {
-                        final url = Uri.parse('tel:${member.phone}');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        }
-                      }
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  _buildContactBtn(
-                    iconWidget: const WhatsAppIconWidget(size: 18, color: Color(0xFF15803D)),
-                    color: const Color(0xFFDCFCE7),
-                    iconColor: const Color(0xFF15803D),
-                    onTap: () async {
-                      final waNumber = member.whatsappNumber.isNotEmpty ? member.whatsappNumber : member.phone;
-                      if (waNumber.isNotEmpty) {
-                        String formattedPhone = waNumber;
-                        if (formattedPhone.length == 10) {
-                          formattedPhone = "+91$formattedPhone";
-                        }
-                        final url = Uri.parse('https://wa.me/${formattedPhone.replaceAll(RegExp(r'[^0-9+]'), '')}');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ),
+
             ],
           ),
         ),
@@ -397,10 +358,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> with SingleTickerProv
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
-                const AnimatedSkeleton(width: 38, height: 38, borderRadius: 19),
-                const SizedBox(width: 8),
-                const AnimatedSkeleton(width: 38, height: 38, borderRadius: 19),
+
               ],
             ),
           ),

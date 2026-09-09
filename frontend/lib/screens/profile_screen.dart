@@ -100,9 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: TextFormField(
             controller: controller,
             keyboardType: maxLines > 1 ? TextInputType.multiline : keyboardType,
-            maxLength: label == "Rotary ID"
-                ? 8
-                : ((label == "Mobile Number" || label == "WhatsApp Number") ? 10 : null),
+            maxLength: (label == "Mobile Number" || label == "WhatsApp Number") ? 10 : null,
             autofocus: true,
             minLines: maxLines,
             maxLines: maxLines,
@@ -431,29 +429,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       ),
                     ),
-                    const Divider(height: 1, thickness: 0.8, color: AppTheme.border),
-                    _buildInfoRow(
-                      Icons.card_membership_outlined,
-                      "Rotary ID",
-                      user.ridNo,
-                      iconColor: Colors.blueAccent,
-                      onEdit: () => _editTextField(
-                        memberId: user.docId,
-                        label: "Rotary ID",
-                        fieldKey: "ridNo",
-                        currentValue: user.ridNo,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "Rotary ID cannot be empty";
-                          }
-                          if (!RegExp(r'^\d{8}$').hasMatch(value.trim())) {
-                            return "8 digits only";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+
                     const Divider(height: 1, thickness: 0.8, color: AppTheme.border),
                     _buildInfoRow(
                       Icons.cake_outlined,

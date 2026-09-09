@@ -67,10 +67,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/app-logo.png
-    - assets/splash.png
-    - assets/calendar.png
-    - assets/event.png
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

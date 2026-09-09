@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
-  static bool _hasCheckedNewActivity = false;
   static bool _hasCheckedSpecialEvents = false;
 
   @override
@@ -50,11 +49,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final isVisitor = member?.status == 'visitor';
 
     if (member != null && !isVisitor) {
-      if (!_hasCheckedNewActivity) {
-        _hasCheckedNewActivity = true;
-        _checkNewBusinessActivity(member.docId);
-      }
-
       _checkSpecialEvents();
     }
   }
@@ -127,163 +121,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return isTerm1Now == isTerm1Date;
   }
 
-  void _checkNewBusinessActivity(String memberId) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      
-      final currentThankYous = (await ThankNoteService().streamReceivedByMember(memberId).first).length;
-      final currentReferrals = (await ReferralService().streamReceivedByMember(memberId).first).length;
-
-      final lastSeenThankYous = prefs.getInt('last_seen_thank_you_count_$memberId') ?? 0;
-      final lastSeenReferrals = prefs.getInt('last_seen_referral_count_$memberId') ?? 0;
-
-      final newThankYous = currentThankYous > lastSeenThankYous ? currentThankYous - lastSeenThankYous : 0;
-      final newReferrals = currentReferrals > lastSeenReferrals ? currentReferrals - lastSeenReferrals : 0;
-
-      await prefs.setInt('last_seen_thank_you_count_$memberId', currentThankYous);
-      await prefs.setInt('last_seen_referral_count_$memberId', currentReferrals);
-
-      if (newThankYous > 0 || newReferrals > 0) {
-        if (!mounted) return;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _showWelcomeThanksDialog(newThankYous, newReferrals);
-        });
-      }
-    } catch (e) {
-      debugPrint('Error checking new business activity: $e');
-    }
-  }
-
-  void _showWelcomeThanksDialog(int newThankYous, int newReferrals) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
-            "New Activity",
-            style: GoogleFonts.outfit(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.primary,
-              fontSize: 18,
-            ),
-          ),
-          content: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.border),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (newThankYous > 0) ...[
-                  Row(
-                    children: [
-                      const Icon(Icons.handshake_outlined, color: AppTheme.primary, size: 22),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          "Thankyou: $newThankYous",
-                          style: GoogleFonts.outfit(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.textPrimary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ThanksNoteHistoryScreen(initialFilter: "Given"),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text("View", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ],
-                if (newThankYous > 0 && newReferrals > 0) ...[
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Divider(height: 1, color: AppTheme.border),
-                  ),
-                ],
-                if (newReferrals > 0) ...[
-                  Row(
-                    children: [
-                      const Icon(Icons.description_outlined, color: AppTheme.primary, size: 22),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          "Referrals: $newReferrals",
-                          style: GoogleFonts.outfit(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.textPrimary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ThanksNoteHistoryScreen(initialFilter: "Referal"),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text("View", style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                "Close",
-                style: GoogleFonts.outfit(
-                  color: AppTheme.textSecondary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -409,12 +246,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  _buildQuickInfoItem(Icons.phone, member.phone),
+                                  _buildQuickInfoItem(Icons.phone, member.phone, color: AppTheme.secondary),
                                   if (!isVisitor) ...[
                                     Container(width: 1, height: 20, color: Colors.white24),
                                     _buildQuickInfoItem(Icons.bloodtype, member.bloodGroup, color: Colors.redAccent),
-                                    Container(width: 1, height: 20, color: Colors.white24),
-                                    _buildQuickInfoItem(Icons.badge, member.ridNo.isNotEmpty ? member.ridNo : "Member", color: AppTheme.secondary),
                                   ],
                                 ],
                               ),
@@ -986,29 +821,47 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     required VoidCallback onTap,
   }) {
     return Expanded(
-      child: Card(
-        elevation: 0,
-        color: Colors.transparent,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.secondary.withOpacity(0.3), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.secondary.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(
-                  imagePath,
-                  width: 42,
-                  height: 42,
-                  fit: BoxFit.contain,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.secondary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    imagePath,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   t(label),
                   style: GoogleFonts.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     color: AppTheme.textPrimary,
                   ),
                   textAlign: TextAlign.center,

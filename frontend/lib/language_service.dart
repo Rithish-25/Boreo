@@ -28,7 +28,7 @@ class LanguageService {
 
   // Comprehensive pre-seeded offline dictionary for instant and offline translation of key UI strings
   static final Map<String, String> _tamilDictionary = {
-    'Boreo Dashboard': 'போரியோ டாஷ்போர்டு',
+    'BOREO Dashboard': 'போரியோ டாஷ்போர்டு',
     'Quick Services': 'விரைவான சேவைகள்',
     'Calendar': 'நாட்காட்டி',
     'News & Events': 'செய்திகள் & நிகழ்வுகள்',

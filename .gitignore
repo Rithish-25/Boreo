@@ -56,6 +56,7 @@ Desktop.ini
 # Android Specific Artifacts
 **/android/local.properties
 **/android/.gradle/
+**/.kotlin/
 **/android/captures/
 **/android/**/GeneratedPluginRegistrant.java
 **/android/app/debug/
